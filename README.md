@@ -1,15 +1,17 @@
-# ogage for RGB10/OGA BE (1.1)
+# ogage for OGC
+
+Includes Brightness Control, Volume Control, Mute, Brightness 10%, Brightness 50%, Perfnorm, perfmaxm, Wifi On, Wifi Off and Standby
 
 Prequisites
 ===========
-- brightnessctl
-- rustc
-- evdev_rs
+```
+sudo apt install brightnessctl rustc autotools-dev automake libtool libtool-bin
+```
 
 Build
 =====
 ```
-git clone https://github.com/christianhaitian/ogage.git
+git clone https://github.com/southoz/ogage.git
 cd ogage
 cargo build --release
 strip target/release/ogage
