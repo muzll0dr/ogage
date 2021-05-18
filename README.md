@@ -1,4 +1,4 @@
-# ogage for OGS
+# ogage for RGB10 Max
 
 Includes Brightness Control, Volume Control, Mute, Brightness 10%, Brightness 50%, Perfnorm, perfmaxm, Wifi On, Wifi Off and Standby
 
