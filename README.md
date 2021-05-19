@@ -22,7 +22,7 @@ Suspend - 13
 Prequisites
 ===========
 ```
-sudo apt install brightnessctl rustc autotools-dev automake libtool libtool-bin
+sudo apt install brightnessctl rustc autotools-dev automake libtool libtool-bin libevdev-dev
 ```
 
 Build
