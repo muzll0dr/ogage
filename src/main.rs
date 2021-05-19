@@ -11,19 +11,20 @@ use std::os::unix::io::AsRawFd;
 use mio::{Poll,Events,Token,Interest};
 use mio::unix::SourceFd;
 
-static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY6);
+static HOTKEY:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4);
 static BRIGHT_UP:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_UP);
 static BRIGHT_DOWN: EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_DOWN);
 static VOL_UP:      EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_RIGHT);
 static VOL_DOWN:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_DPAD_LEFT);
-static MUTE:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY5);
+static MUTE:        EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
 static PERF_MAX:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL2);
 static PERF_NORM:   EventCode = EventCode::EV_KEY(EV_KEY::BTN_TL);
-static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY3);
-static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY4);
-static WIFI_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
-static WIFI_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
-static SUSPEND:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY2);
+static DARK_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
+static DARK_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
+// static WIFI_ON:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR);
+// static WIFI_OFF:    EventCode = EventCode::EV_KEY(EV_KEY::BTN_TR2);
+static SUSPEND:     EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY1);
+static TEST:EventCode = EventCode::EV_KEY(EV_KEY::BTN_TRIGGER_HAPPY6);
 
 fn blinkon() {
 
@@ -49,13 +50,13 @@ fn blinkoff() {
 
 
 fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
-    /*println!("Event: time {}.{} type {} code {} value {} hotkey {}",
-             ev.time.tv_sec,
-             ev.time.tv_usec,
-             ev.event_type,
-             ev.event_code,
-             ev.value,
-             hotkey);*/
+    // println!("Event: time {}.{} type {} code {} value {} hotkey {}",
+    //          ev.time.tv_sec,
+    //          ev.time.tv_usec,
+    //          ev.event_type,
+    //          ev.event_code,
+    //          ev.value,
+    //          hotkey);
 
     if hotkey && ev.value == 1 {
         if ev.event_code == BRIGHT_UP {
@@ -65,10 +66,10 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
             Command::new("brightnessctl").args(&["-n","s","2%-"]).output().expect("Failed to execute brightnessctl");
         }
         else if ev.event_code == VOL_UP {
-            Command::new("amixer").args(&["-q", "sset", "Playback", "1%+"]).output().expect("Failed to execute amixer");
+            Command::new("amixer").args(&["-q", "sset", "Playback", "2%+"]).output().expect("Failed to execute amixer");
         }
         else if ev.event_code == VOL_DOWN {
-            Command::new("amixer").args(&["-q", "sset", "Playback", "1%-"]).output().expect("Failed to execute amixer");
+            Command::new("amixer").args(&["-q", "sset", "Playback", "2%-"]).output().expect("Failed to execute amixer");
         }
         else if ev.event_code == MUTE {
             Command::new("amixer").args(&["sset", "Playback", "0"]).output().expect("Failed to execute amixer");
@@ -87,16 +88,19 @@ fn process_event(_dev: &Device, ev: &InputEvent, hotkey: bool) {
         else if ev.event_code == DARK_OFF {
             Command::new("brightnessctl").args(&["s","50%"]).output().expect("Failed to execute brightnessctl");
         }
-        else if ev.event_code == WIFI_ON {
-            blinkon();
-            Command::new("nmcli").args(&["radio","wifi","on"]).output().expect("Failed to execute wifi on");
-        }
-        else if ev.event_code == WIFI_OFF {
-            Command::new("nmcli").args(&["radio","wifi","off"]).output().expect("Failed to execute wifi off");
-            blinkoff();
-        }
+        // else if ev.event_code == WIFI_ON {
+        //     blinkon();
+        //     Command::new("nmcli").args(&["radio","wifi","on"]).output().expect("Failed to execute wifi on");
+        // }
+        // else if ev.event_code == WIFI_OFF {
+        //     Command::new("nmcli").args(&["radio","wifi","off"]).output().expect("Failed to execute wifi off");
+        //     blinkoff();
+        // }
         else if ev.event_code == SUSPEND {
             Command::new("sudo").args(&["systemctl", "suspend"]).output().expect("Failed to execute power off");
+        }
+        else if ev.event_code == TEST {
+            blinkon();
         }
     }
 }
